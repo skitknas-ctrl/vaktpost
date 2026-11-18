@@ -69,10 +69,8 @@ android {
     // Javamails tjänstefiler (META-INF/javamail.*, META-INF/services) måste däremot följa med.
     packaging {
         resources {
-            excludes += setOf(
-                "META-INF/LICENSE", "META-INF/LICENSE.txt", "META-INF/NOTICE",
-                "META-INF/NOTICE.txt", "META-INF/DEPENDENCIES"
-            )
+            // LICENSE*/NOTICE* täcker även .md-varianterna som android-mail och android-activation båda har.
+            excludes += setOf("META-INF/LICENSE*", "META-INF/NOTICE*", "META-INF/DEPENDENCIES")
         }
     }
 }
