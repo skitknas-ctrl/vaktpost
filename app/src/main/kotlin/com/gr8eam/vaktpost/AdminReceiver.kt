@@ -4,11 +4,12 @@ import android.app.admin.DeviceAdminReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 
 /**
  * Enhetsadministratören. Den enda rättigheten appen ber om är watch-login, så systemet skickar hit
- * onPasswordFailed varje gång någon skriver fel upplåsningskod. Då startas CaptureService som tar ett kort.
+ * onPasswordFailed varje gång någon skriver fel upplåsningskod (PIN, mönster eller lösenord). Då ber vi
+ * WatchService ta ett kort. OBS: fel fingeravtryck/ansikte på låsskärmen rapporteras INTE hit av Android –
+ * det fångas i stället av WatchService via skärmtändning (se WatchService).
  */
 class AdminReceiver : DeviceAdminReceiver() {
 
@@ -21,9 +22,7 @@ class AdminReceiver : DeviceAdminReceiver() {
         if (fails < Store.threshold(context)) return
         Store.setFails(context, 0)
 
-        val svc = Intent(context, CaptureService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(svc)
-        else context.startService(svc)
+        WatchService.start(context, WatchService.ACTION_FAIL)
     }
 
     override fun onPasswordSucceeded(context: Context, intent: Intent) {
@@ -34,6 +33,7 @@ class AdminReceiver : DeviceAdminReceiver() {
     override fun onDisabled(context: Context, intent: Intent) {
         // Administratören togs bort i systeminställningarna: slå av skyddet så att appen visar rätt status.
         Store.setArmed(context, false)
+        WatchService.stop(context)
     }
 
     companion object {

@@ -15,6 +15,17 @@ andra appar – bara "vem försökte låsa upp min telefon".
 När skyddet är på tas ett foto varje gång någon skriver fel kod (eller efter N fel i rad, om du ställt in det).
 Korten visas i appen med tidsstämpel; tryck på ett kort för att se det i full storlek, dela eller radera det.
 
+### Fel fingeravtryck eller ansikte
+
+Android berättar **inte** för appar när någon misslyckas med fingeravtryck eller ansikte på låsskärmen – det
+är en medveten säkerhetsspärr i systemet. Bara fel **kod/mönster/lösenord** rapporteras till appar. (En envis
+inkräktare tvingas dock till koden efter ett par misslyckade fingeravtryck, och då fångas hen.)
+
+För att ändå fånga fel finger/ansikte direkt kan Vaktpost ta ett kort **varje gång skärmen tänds medan
+telefonen är låst** (slås på/av under **Inställningar**, på som standard). För att du inte ska fyllas av
+selfies på dig själv: om du själv låser upp inom **30 sekunder** raderas det kortet automatiskt. Ett kort från
+någon som *inte* lyckas låsa upp blir alltså kvar, medan dina egna försvinner.
+
 ### Valfri e-post
 
 Under **Inställningar** kan du fylla i ett SMTP-konto så att korten också mejlas till dig. Lämnar du det tomt

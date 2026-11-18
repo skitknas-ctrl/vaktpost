@@ -75,9 +75,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <!-- Tar kortet i bakgrunden; stängs direkt efteråt. Kameratypen krävs på Android 14+. -->
+        <!-- Tar ett enstaka testkort i bakgrunden; stängs direkt efteråt. Kameratypen krävs på Android 14+. -->
         <service
             android:name=".CaptureService"
+            android:exported="false"
+            android:foregroundServiceType="camera" />
+
+        <!-- Kvarvarande vakttjänst: fångar fel kod (via AdminReceiver) och skärmtändning medan låst
+             (fel fingeravtryck/ansikte). Kameratypen krävs på Android 14+. -->
+        <service
+            android:name=".WatchService"
             android:exported="false"
             android:foregroundServiceType="camera" />
     </application>

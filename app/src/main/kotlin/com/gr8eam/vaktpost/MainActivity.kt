@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             setTypeface(typeface, android.graphics.Typeface.BOLD)
         })
         root.addView(TextView(this).apply {
-            text = "Tar ett foto med framkameran när någon skriver fel upplåsningskod."
+            text = "Tar ett foto med framkameran vid misslyckad upplåsning – fel kod/mönster, och (om påslaget) även fel fingeravtryck eller ansikte."
             setTextColor(Color.parseColor("#95A0B5"))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setPadding(0, dp(4), 0, dp(18))
@@ -167,6 +167,9 @@ class MainActivity : AppCompatActivity() {
         camBtn.isEnabled = !cam
         adminBtn.text = if (admin) "Enhetsadministratör: aktiv ✓ (tryck för att ändra)" else "Aktivera enhetsadministratör"
 
+        // Om skyddet är på men tjänsten hunnit dödas (minnesrensning m.m.): se till att den kör igen.
+        if (armed) WatchService.start(this)
+
         refreshGallery()
     }
 
@@ -220,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
     // ---------------------------------------------------------------- åtgärder
     private fun toggleArmed() {
-        if (Store.armed(this)) { Store.setArmed(this, false); refresh(); return }
+        if (Store.armed(this)) { Store.setArmed(this, false); WatchService.stop(this); refresh(); return }
         // slå på: se till att kamera och administratör finns, annars guida dit
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             toast("Ge först kamera-tillstånd"); askCamera.launch(android.Manifest.permission.CAMERA); return
@@ -228,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         if (!dpm.isAdminActive(AdminReceiver.component(this))) {
             toast("Aktivera först enhetsadministratör"); requestAdmin(); return
         }
-        Store.setArmed(this, true); Store.setFails(this, 0); refresh()
+        Store.setArmed(this, true); Store.setFails(this, 0); WatchService.start(this); refresh()
         toast("Skyddet är på")
     }
 

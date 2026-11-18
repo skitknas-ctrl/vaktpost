@@ -20,6 +20,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var threshold: EditText
     private lateinit var burst: EditText
+    private lateinit var screenTrig: EditText
     private lateinit var mailOn: EditText
     private lateinit var host: EditText
     private lateinit var port: EditText
@@ -46,6 +47,10 @@ class SettingsActivity : AppCompatActivity() {
 
         label(root, "Antal kort per utlösning (1–3)")
         burst = field(root, Store.burst(this).toString(), InputType.TYPE_CLASS_NUMBER)
+
+        head(root, "Fånga även fel fingeravtryck/ansikte", 17f, true)
+        label(root, "Android berättar inte för appar om fel fingeravtryck eller ansikte på låsskärmen. I stället kan Vaktpost ta ett kort varje gång skärmen tänds medan telefonen är låst. Om du själv låser upp inom 30 sekunder raderas det kortet automatiskt, så du slipper selfies på dig själv. Skriv ja eller nej.")
+        screenTrig = field(root, if (Store.screenTrigger(this)) "ja" else "nej", InputType.TYPE_CLASS_TEXT)
 
         head(root, "Skicka korten via e-post (valfritt)", 17f, true)
         label(root, "Lämna tomt för att bara spara korten i appen. För Gmail: host smtp.gmail.com, port 587, och ett app-lösenord (inte ditt vanliga lösenord).")
@@ -115,6 +120,8 @@ class SettingsActivity : AppCompatActivity() {
     private fun save() {
         Store.setThreshold(this, threshold.text.toString().toIntOrNull() ?: 1)
         Store.setBurst(this, burst.text.toString().toIntOrNull() ?: 1)
+        val yes = fun(s: String) = s.trim().lowercase().let { it == "ja" || it == "yes" || it == "j" }
+        Store.setScreenTrigger(this, yes(screenTrig.text.toString()))
         val on = mailOn.text.toString().trim().lowercase().let { it == "ja" || it == "yes" || it == "j" }
         Store.setMailOn(this, on)
         Store.saveMail(
