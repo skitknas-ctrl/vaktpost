@@ -1,0 +1,19 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/app/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+!app/debug.keystore
+release.keystore
+# privat material (nycklar, butiksunderlag) får aldrig hamna i det publika repot
+privat/
+__pycache__/
+*.pyc
+node_modules/

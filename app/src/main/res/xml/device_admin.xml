@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vaktpost behöver bara se misslyckade upplåsningsförsök (watch-login). Inga andra administratörsrättigheter begärs:
+     appen kan alltså inte låsa, radera eller styra telefonen, bara få en signal när fel kod skrivs in. -->
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-policies>
+        <watch-login />
+    </uses-policies>
+</device-admin>
